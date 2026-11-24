@@ -447,6 +447,7 @@ function fromRows(c,rows){
     const f=SPEC[c].fields.find(x=>x[0]===k);let val=v;
     if(v instanceof Date)val=new Date(v.getTime()-v.getTimezoneOffset()*6e4).toISOString().slice(0,10);
     if(f){if(f[2]==='number')val=num(val);else if(f[2]==='list')val=String(val).split(/[,;\/]/).map(s=>s.trim()).filter(Boolean);
+      if(c==='events'&&k==='attendees'&&typeof val==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(val.trim()))continue;
       else if(f[2]==='month'){const s=String(val).slice(0,3).toLowerCase();val=MON.findIndex(m=>m.toLowerCase()===s)+1||(+val||0)}
       else if(f[2]==='date'&&!(v instanceof Date)){const d=new Date(val);val=isNaN(d)?String(val):new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)}
       else val=String(val).trim()}
